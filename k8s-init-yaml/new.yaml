@@ -1,0 +1,42 @@
+apiVersion: kubeadm.k8s.io/v1beta3
+bootstrapTokens:
+- groups:
+  - system:bootstrappers:kubeadm:default-node-token
+  token: 7t2weq.bjbawausm0jaxury
+  ttl: 24h0m0s
+  usages:
+  - signing
+  - authentication
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 192.168.88.88
+  bindPort: 6443
+nodeRegistration:
+  criSocket: unix:///var/run/cri-dockerd.sock
+  imagePullPolicy: IfNotPresent
+  name: k8s-master01
+  taints:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/control-plane
+---
+apiServer:
+  certSANs:
+  - 192.168.88.88
+  timeoutForControlPlane: 4m0s
+apiVersion: kubeadm.k8s.io/v1beta3
+certificatesDir: /etc/kubernetes/pki
+clusterName: kubernetes
+controlPlaneEndpoint: 192.168.88.88:6443
+controllerManager: {}
+dns: {}
+etcd:
+  local:
+    dataDir: /var/lib/etcd
+imageRepository: rpi-fz04mo0mhspt2cyx.cn-beijing.personal.cr.aliyuncs.com/tbj-k8s
+kind: ClusterConfiguration
+kubernetesVersion: v1.28.15
+networking:
+  dnsDomain: cluster.local
+  podSubnet: 172.16.0.0/16
+  serviceSubnet: 10.96.0.0/16
+scheduler: {}
